@@ -7,6 +7,9 @@ import json
 dbname = 'covid'
 collection_name = 'cases'
 
+date_str_to_num = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+                   'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+                   'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'}
 
 def get_cases_data():
     url = "https://covidtracking.com/data/national/cases"
@@ -15,7 +18,11 @@ def get_cases_data():
     data = []
     for tr in soup.body.div.div.main.find_all('tr')[1:]:
         raw = tr.find_all('span')
-        data.append([raw[1].contents[0], raw[3].contents[0], raw[5].contents[0]])
+        date_str, case, new_case = raw[1].contents[0], raw[3].contents[0], raw[5].contents[0]
+        month_str, day, year = date_str.replace(",", "").split(" ")
+        month = date_str_to_num[month_str]
+        date = "{}-{}-{}".format(year, month, day)
+        data.append([date, case, new_case])
     df = pd.DataFrame(data=data, columns=['Date','Case','new_case'])
     return df
 
