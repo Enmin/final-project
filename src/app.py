@@ -2,12 +2,13 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-import main_page
+import page_1
+import page_2
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-main_page.register_callbacks(app)
+page_1.register_callbacks(app)
 
 app.layout = html.Div([
     html.H1("Welcome to Data Secrets"),
@@ -17,27 +18,24 @@ app.layout = html.Div([
 
 
 index_page = html.Div([
-    dcc.Link('Main', href='/main'),
+    dcc.Link('Page 1', href='/page_1'),
     html.Br(),
-    dcc.Link('unFinished', href='/unfinished'),
+    dcc.Link('Page 2', href='/page_2'),
 ])
 
 
-page_1_layout = main_page.layout
+page_1_layout = page_1.layout
 
 
-page_2_layout = html.Div([
-    html.H1('Page 2'),
-    dcc.Link('Go back to home', href='/')
-])
+page_2_layout = page_2.dynamic_layout(app)
 
 
 @app.callback(dash.dependencies.Output('page-content', 'children'),
               [dash.dependencies.Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/main':
+    if pathname == '/page_1':
         return page_1_layout
-    elif pathname == '/unfinished':
+    elif pathname == '/page_2':
         return page_2_layout
     else:
         return index_page
