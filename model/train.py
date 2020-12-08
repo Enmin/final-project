@@ -13,6 +13,7 @@ from sklearn.metrics import mean_squared_error, make_scorer
 import numpy as np
 from math import sqrt
 from model.prepare_data import generate_data
+import joblib
 
 
 def MLpipe_KFold_RMSE(X,y, preprocessor, ML_algo, param_grid):
@@ -43,15 +44,36 @@ def MLpipe_KFold_RMSE(X,y, preprocessor, ML_algo, param_grid):
         test_scores.append(test_score)
         best_models.append(grid.best_params_)
         # append the test score and the best model to the lists (1 point)
-    return best_models, test_scores
+
+    return best_models, test_scores, grid.best_estimator_
 
 
 def xgboost_train(data):
     pass
 
+def save_best_RF(code):
+    dataset = generate_data(code)
+    y = dataset['target']
+    X = dataset.loc[:, dataset.columns != 'target']
+    preprocessor = StandardScaler()  # if you had a more complex dataset, you'd have a ColumnTransformer here
+    algos = {
+        "RF": RandomForestRegressor()
+    }
+    params = {"RF": {'randomforestregressor__max_depth': [30],'randomforestregressor__max_features': [0.5]}}
+
+    models_dict = {}
+    scores_dict = {}
+    for algo in algos:
+        models, scores, estimator = MLpipe_KFold_RMSE(X, y, preprocessor, algos[algo], params[algo])
+        models_dict[algo] = models
+        scores_dict[algo] = (np.mean(scores), np.std(scores))
+        joblib.dump(estimator, '{}.pkl'.format(code))
+
 
 if __name__ == '__main__':
-    dataset = generate_data()
+    save_best_RF('AAPL')
+    exit()
+    dataset = generate_data('AAPL')
     y = dataset['target']
     X = dataset.loc[:, dataset.columns!= 'target']
     preprocessor = StandardScaler()  # if you had a more complex dataset, you'd have a ColumnTransformer here
@@ -77,7 +99,7 @@ if __name__ == '__main__':
     models_dict = {}
     scores_dict = {}
     for algo in algos:
-        models, scores = MLpipe_KFold_RMSE(X, y, preprocessor, algos[algo], params[algo])
+        models, scores, estimator = MLpipe_KFold_RMSE(X, y, preprocessor, algos[algo], params[algo])
         models_dict[algo] = models
         scores_dict[algo] = (np.mean(scores), np.std(scores))
     rank_by_mean = list((k, v) for k, v in sorted(scores_dict.items(), key=lambda item: item[1][0], reverse=False))

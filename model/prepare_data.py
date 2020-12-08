@@ -4,9 +4,9 @@ from src.mongodb import *
 import pandas as pd
 
 
-def generate_data():
+def generate_data(code):
     db = connect('stock')
-    stock_data = db['historical'].find({'code': 'AAPL'})
+    stock_data = db['historical'].find({'code': code})
     stock_data = pd.DataFrame(stock_data)
     db = connect('covid')
     case_data = db['cases'].find()
