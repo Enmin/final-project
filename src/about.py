@@ -12,7 +12,7 @@ def about_page_header():
     Returns the page header as a dash `html.Div`
     """
     return html.Div(id='header', children=[
-        html.Div([html.H3('About Page')],
+        html.Div([html.H3('About Page', style={'text-align': 'center'})],
                  className="ten columns"),
     ], className="row")
 

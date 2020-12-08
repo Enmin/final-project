@@ -2,6 +2,13 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 
+def detail_header():
+    return html.Div(id='header', children=[
+        html.Div([html.H3('Project Detail', style={'text-align': 'center'})],
+                 className="ten columns"),
+    ], className="row")
+
+
 def detail_page():
     """
     Returns cotents on about page

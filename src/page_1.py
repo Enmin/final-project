@@ -45,6 +45,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 available_indicators = ['close', 'high', 'low', 'open']
 
 layout = html.Div([
+    html.H3("Model & Prediction", style={'text-align': 'center'}),
     html.Div([
         html.Div([
             dcc.Dropdown(

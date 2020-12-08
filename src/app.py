@@ -14,23 +14,23 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 page_1.register_callbacks(app)
 
 app.layout = html.Div([
-    html.H1("Welcome to Data Secrets", style={'text-align': 'center'}),
     dcc.Location(id='url', refresh=False),
     html.Div(id='page-content'),
 ])
 
 
 index_page = html.Div([
-    dcc.Link('Page 1', href='/page_1', style={'font-size': '30px', 'font-family': 'Times New Roman, Times, serif', 'font-weight': 'bold',
-                                              'justify-content': 'center', 'display': 'flex'}),
-    html.Br(),
-    dcc.Link('Page 2', href='/page_2', style={'font-size': '30px', 'font-family': 'Times New Roman, Times, serif', 'font-weight': 'bold',
-                                              'justify-content': 'center', 'display': 'flex'}),
-    html.Br(),
+    html.H1("Welcome to Data Secrets", style={'text-align': 'center'}),
     dcc.Link('About', href='/about', style={'font-size': '30px', 'font-family': 'Times New Roman, Times, serif', 'font-weight': 'bold',
                                               'justify-content': 'center', 'display': 'flex'}),
     html.Br(),
     dcc.Link('Detail', href='/detail', style={'font-size': '30px', 'font-family': 'Times New Roman, Times, serif', 'font-weight': 'bold',
+                                              'justify-content': 'center', 'display': 'flex'}),
+    html.Br(),
+    dcc.Link('Basic Data Analysis', href='/page_2', style={'font-size': '30px', 'font-family': 'Times New Roman, Times, serif', 'font-weight': 'bold',
+                                              'justify-content': 'center', 'display': 'flex'}),
+    html.Br(),
+    dcc.Link('Model & Prediction', href='/page_1', style={'font-size': '30px', 'font-family': 'Times New Roman, Times, serif', 'font-weight': 'bold',
                                               'justify-content': 'center', 'display': 'flex'}),
     html.Br(),
     html.Div([dcc.Graph(id='stock_pie_chart', figure=figures.index_visual())]),
@@ -57,7 +57,7 @@ page_2_layout = page_2.dynamic_layout(app)
 
 about_layout = html.Div([about.about_page_header(), about.about_page()])
 
-detail_layout = html.Div([detail.detail_page()])
+detail_layout = html.Div([detail.detail_header(), detail.detail_page()])
 
 @app.callback(dash.dependencies.Output('page-content', 'children'),
               [dash.dependencies.Input('url', 'pathname')])
