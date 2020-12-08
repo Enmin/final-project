@@ -6,6 +6,7 @@ import page_1
 import page_2
 import figures
 import about
+import detail
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -27,6 +28,9 @@ index_page = html.Div([
                                               'justify-content': 'center', 'display': 'flex'}),
     html.Br(),
     dcc.Link('About', href='/about', style={'font-size': '30px', 'font-family': 'Times New Roman, Times, serif', 'font-weight': 'bold',
+                                              'justify-content': 'center', 'display': 'flex'}),
+    html.Br(),
+    dcc.Link('Detail', href='/detail', style={'font-size': '30px', 'font-family': 'Times New Roman, Times, serif', 'font-weight': 'bold',
                                               'justify-content': 'center', 'display': 'flex'}),
     html.Br(),
     html.Div([dcc.Graph(id='stock_pie_chart', figure=figures.index_visual())]),
@@ -53,6 +57,7 @@ page_2_layout = page_2.dynamic_layout(app)
 
 about_layout = html.Div([about.about_page_header(), about.about_page()])
 
+detail_layout = html.Div([detail.detail_page()])
 
 @app.callback(dash.dependencies.Output('page-content', 'children'),
               [dash.dependencies.Input('url', 'pathname')])
@@ -63,6 +68,8 @@ def display_page(pathname):
         return page_2_layout
     elif pathname == '/about':
         return about_layout
+    elif pathname == '/detail':
+        return detail_layout
     else:
         return index_page
 
