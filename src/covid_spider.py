@@ -17,12 +17,12 @@ def get_cases_data(db=None):
     data = []
     for tr in soup.body.div.div.main.find_all('tr')[1:]:
         raw = tr.find_all('span')
-        date_str, case, new_case = raw[1].contents[0], raw[3].contents[0], raw[5].contents[0]
+        date_str, case, new_case = raw[1].contents[0], int(raw[3].contents[0].replace(',','')), int(raw[5].contents[0].replace(',',''))
         month_str, day, year = date_str.replace(",", "").split(" ")
         month = date_str_to_num[month_str]
         date = pd.to_datetime("{}-{}-{}".format(year, month, day))
         data.append([date, case, new_case])
-    df = pd.DataFrame(data=data, columns=['Date','Case','new_case'])
+    df = pd.DataFrame(data=data, columns=['date','case','new_case'])
     if db is not None:
         col = create_collection(db, 'cases')
         insert(df, col)
